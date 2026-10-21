@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StudyTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>StudyTrack</h1>
+    <p>Welcome back!</p>
+    
+    <div id="body_parent">
+        <!-- Streak / Stats Row -->
+        <div id="streak">
+            <div class="stat-item">
+                <span class="icon">🔥</span>
+                <span class="stat-num">5</span>
+                <span class="stat-label">Day streak</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">📅</span>
+                <span class="stat-num">18</span>
+                <span class="stat-label">Active days</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">✓✓</span>
+                <span class="stat-num">12</span>
+                <span class="stat-label">Tasks done</span>
+            </div>
+        </div>
+
+        <!-- Calendar Card -->
+        <div id="calendar">
+            <div class="cal-header">
+                <h2>Login activity</h2>
+                <span>October 2026</span>
+            </div>
+
+            <div class="weekdays">
+                <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+            </div>
+
+            <div class="days-flex">
+                <!-- Empty days before the 1st -->
+                <div class="day empty"></div>
+                <div class="day empty"></div>
+                <div class="day empty"></div>
+                <!-- October Days -->
+                <div class="day active">1</div>
+                <div class="day active">2</div>
+                <div class="day">3</div>
+                <div class="day">4</div>
+                <div class="day active">5</div>
+                <div class="day active">6</div>
+                <div class="day active">7</div>
+                <div class="day">8</div>
+                <div class="day active">9</div>
+                <div class="day">10</div>
+                <div class="day">11</div>
+                <div class="day active">12</div>
+                <div class="day active">13</div>
+                <div class="day active">14</div>
+                <div class="day active">15</div>
+                <div class="day active">16</div>
+                <div class="day">17</div>
+                <div class="day">18</div>
+                <div class="day active">19</div>
+                <div class="day active">20</div>
+                <div class="day">21</div>
+                <div class="day">22</div>
+                <div class="day">23</div>
+                <div class="day">24</div>
+                <div class="day">25</div>
+                <div class="day">26</div>
+                <div class="day">27</div>
+                <div class="day">28</div>
+                <div class="day">29</div>
+                <div class="day">30</div>
+                <div class="day">31</div>
+                <!-- Trailing empty day -->
+                <div class="day empty"></div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item"><span class="dot active"></span> Logged in</div>
+                <div class="legend-item"><span class="dot"></span> Not logged in</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

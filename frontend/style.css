@@ -1,0 +1,171 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background-color: #030303;
+    color: #ffffff;
+    max-width: 580px;
+    margin: 24px auto;
+    padding: 28px;
+    border: 1px solid #1c1c1c;
+    border-radius: 28px;
+}
+
+/* Header & Cap Icon */
+h1 {
+    font-size: 22px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+h1::after {
+    content: "🎓";
+    font-size: 20px;
+}
+
+body > p {
+    color: #9e9e9e;
+    font-size: 15px;
+    margin-bottom: 32px;
+}
+
+/* Main Parent Flex Container */
+#body_parent {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* Streak Section (3 Columns using Flexbox) */
+#streak {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 8px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.stat-item .icon {
+    font-size: 16px;
+    color: #a0a0a0;
+    margin-bottom: 2px;
+}
+
+.stat-item .stat-num {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.stat-item .stat-label {
+    font-size: 14px;
+    color: #8c8c8c;
+}
+
+/* Calendar Card Container */
+#calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid #1a1a1a;
+    border-radius: 20px;
+    padding: 22px;
+    background-color: #060606;
+}
+
+.cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cal-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.cal-header span {
+    font-size: 15px;
+    color: #9e9e9e;
+}
+
+/* Weekdays Row (M T W T F S S) */
+.weekdays {
+    display: flex;
+    gap: 8px;
+    text-align: center;
+    color: #b0b0b0;
+    font-size: 13px;
+}
+
+.weekdays div {
+    flex: 1;
+}
+
+/* Calendar Days (7 items per row using Flex Wrap) */
+.days-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.day {
+    /* 100% divided by 7 columns, minus the 8px gap adjustments */
+    flex: 0 0 calc((100% - (6 * 8px)) / 7);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1c1e1d; /* Not logged in */
+    color: #9e9e9e;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.day.active {
+    background-color: #165640; /* Logged in green */
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.day.empty {
+    background-color: #323533; /* Empty padding days */
+}
+
+/* Footer Legend */
+.legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 4px;
+    font-size: 14px;
+    color: #a0a0a0;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    background-color: #1c1e1d;
+}
+
+.dot.active {
+    background-color: #165640;
+}
