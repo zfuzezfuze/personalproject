@@ -3,6 +3,23 @@ async function loadTasks() {
     const tasks = await response.json();
     console.log(tasks);
 }
+async function loadTasksForDate(date) {
+    const response = await fetch(
+        `http://localhost:5001/api/tasks?date=${encodeURIComponent(date)}`
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to load tasks");
+    }
+
+    const tasks = await response.json();
+
+    console.log(tasks);
+
+    // Later: display these tasks in the calendar interface
+}
+
+loadTasksForDate("2026-10-24");
 
 // Current date cutoff for overdue tasks (October 23, 2026)
 const TODAY = 23;
