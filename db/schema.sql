@@ -1,0 +1,9 @@
+
+CREATE TABLE IF NOT EXISTS tasks (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL DEFAULT 1,
+    title TEXT NOT NULL,
+    due_date DATE NOT NULL,
+    completed BOOLEAN NOT NULL DEFAULT FALSE
+);
+
