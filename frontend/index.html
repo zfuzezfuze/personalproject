@@ -10,83 +10,121 @@
     <h1>StudyTrack</h1>
     <p>Welcome back!</p>
     
-    <div id="body_parent">
-        <!-- Streak / Stats Row -->
-        <div id="streak">
-            <div class="stat-item">
-                <span class="icon">🔥</span>
-                <span class="stat-num">5</span>
-                <span class="stat-label">Day streak</span>
+    <!-- Two-Column Flexbox Wrapper -->
+    <div id="main-layout">
+        
+        <!-- LEFT COLUMN: Streak, Calendar, and Selected Day Tasks -->
+        <div id="body_parent">
+            <!-- Streak / Stats Row -->
+            <!-- Streak / Stats Row -->
+            <div id="streak">
+                <div class="stat-item">
+                    <span class="icon">🔥</span>
+                    <span class="stat-num" id="streak-count">5</span>
+                    <span class="stat-label" onclick="loadTasks()">Day streak</span>
+                </div>
+                <div class="stat-item">
+                    <span class="icon">📅</span>
+                    <span class="stat-num" id="active-days-count">18</span>
+                    <span class="stat-label">Active days</span>
+                </div>
+                <div class="stat-item">
+                    <span class="icon">✓✓</span>
+                    <span class="stat-num" id="tasks-done-count">12</span>
+                    <span class="stat-label">Tasks done</span>
+                </div>
             </div>
-            <div class="stat-item">
-                <span class="icon">📅</span>
-                <span class="stat-num">18</span>
-                <span class="stat-label">Active days</span>
+
+            <!-- Calendar Card -->
+            <div id="calendar">
+                <div class="cal-header">
+                    <h2>Login activity</h2>
+                    <span>October 2026</span>
+                </div>
+
+                <div class="weekdays">
+                    <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+                </div>
+
+                <div class="days-flex" id="calendar_parent">
+                    <div class="day empty"></div>
+                    <div class="day empty"></div>
+                    <div class="day empty"></div>
+                    <div class="day active">1</div>
+                    <div class="day active">2</div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day active">5</div>
+                    <div class="day active">6</div>
+                    <div class="day active">7</div>
+                    <div class="day">8</div>
+                    <div class="day active">9</div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day active">12</div>
+                    <div class="day active">13</div>
+                    <div class="day active">14</div>
+                    <div class="day active">15</div>
+                    <div class="day active">16</div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day active">19</div>
+                    <div class="day active">20</div>
+                    <div class="day">21</div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day">26</div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                    <div class="day">31</div>
+                    <div class="day empty"></div>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item"><span class="dot active"></span> Logged in</div>
+                    <div class="legend-item"><span class="dot overdue"></span> Overdue task</div>
+                    <div class="legend-item"><span class="dot"></span> Not logged in</div>
+                </div>
             </div>
-            <div class="stat-item">
-                <span class="icon">✓✓</span>
-                <span class="stat-num">12</span>
-                <span class="stat-label">Tasks done</span>
+
+            <!-- Selected Day Tasks Card (Bottom Left) -->
+            <div id="tasks">
+                <div class="tasks-header">
+                    <h2>Day Tasks</h2>
+                    <span id="selected-date">Select a day</span>
+                </div>
+
+                <div class="task-input-row">
+                    <input type="text" id="new-task-input" placeholder="Add a new task...">
+                    <button id="add-task-btn">Add</button>
+                </div>
+
+                <ul id="task-list"></ul>
             </div>
         </div>
 
-        <!-- Calendar Card -->
-        <div id="calendar">
-            <div class="cal-header">
-                <h2>Login activity</h2>
-                <span>October 2026</span>
+        <!-- RIGHT COLUMN: All Tasks Overview Sidebar -->
+        <div id="all-tasks-sidebar">
+            <div class="tasks-header">
+                <h2>All Tasks Overview</h2>
+                <span id="total-tasks-count">0 tasks</span>
             </div>
 
-            <div class="weekdays">
-                <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+            <!-- Filter Buttons Row -->
+            <div class="filter-row" id="task-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="incomplete">Incomplete</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
             </div>
 
-            <div class="days-flex">
-                <!-- Empty days before the 1st -->
-                <div class="day empty"></div>
-                <div class="day empty"></div>
-                <div class="day empty"></div>
-                <!-- October Days -->
-                <div class="day active">1</div>
-                <div class="day active">2</div>
-                <div class="day">3</div>
-                <div class="day">4</div>
-                <div class="day active">5</div>
-                <div class="day active">6</div>
-                <div class="day active">7</div>
-                <div class="day">8</div>
-                <div class="day active">9</div>
-                <div class="day">10</div>
-                <div class="day">11</div>
-                <div class="day active">12</div>
-                <div class="day active">13</div>
-                <div class="day active">14</div>
-                <div class="day active">15</div>
-                <div class="day active">16</div>
-                <div class="day">17</div>
-                <div class="day">18</div>
-                <div class="day active">19</div>
-                <div class="day active">20</div>
-                <div class="day">21</div>
-                <div class="day">22</div>
-                <div class="day">23</div>
-                <div class="day">24</div>
-                <div class="day">25</div>
-                <div class="day">26</div>
-                <div class="day">27</div>
-                <div class="day">28</div>
-                <div class="day">29</div>
-                <div class="day">30</div>
-                <div class="day">31</div>
-                <!-- Trailing empty day -->
-                <div class="day empty"></div>
-            </div>
-
-            <div class="legend">
-                <div class="legend-item"><span class="dot active"></span> Logged in</div>
-                <div class="legend-item"><span class="dot"></span> Not logged in</div>
-            </div>
+            <!-- Scrollable container for all tasks across the month -->
+            <ul id="all-tasks-list"></ul>
         </div>
+
     </div>
 
     <script src="script.js"></script>

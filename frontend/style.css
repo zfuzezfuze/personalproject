@@ -5,14 +5,92 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+/* 1. Widen body to fit two side-by-side columns */
 body {
     background-color: #030303;
     color: #ffffff;
-    max-width: 580px;
+    max-width: 980px; /* Widened from 580px */
     margin: 24px auto;
     padding: 28px;
     border: 1px solid #1c1c1c;
     border-radius: 28px;
+}
+
+/* 2. Side-by-side Flexbox layout */
+#main-layout {
+    display: flex;
+    gap: 28px;
+    align-items: stretch;
+}
+
+#body_parent {
+    flex: 1.2; /* Left column takes slightly more room for the calendar */
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* 3. Right Sidebar Card */
+#all-tasks-sidebar {
+    flex: 1; /* Right column */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid #1a1a1a;
+    border-radius: 20px;
+    padding: 22px;
+    background-color: #060606;
+    max-height: 760px; /* Matches height of the left column */
+}
+
+#all-tasks-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    padding-right: 4px;
+    flex: 1;
+}
+
+#all-tasks-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#all-tasks-list::-webkit-scrollbar-thumb {
+    background-color: #2a2d2b;
+    border-radius: 4px;
+}
+
+.all-task-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Green date pill badge (e.g. "Oct 15") */
+.task-date-badge {
+    background-color: #165640;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.task-done-text {
+    text-decoration: line-through;
+    color: #6e6e6e;
+}
+
+/* Stacks vertically on small mobile screens */
+@media (max-width: 768px) {
+    #main-layout {
+        flex-direction: column;
+    }
 }
 
 /* Header & Cap Icon */
@@ -168,4 +246,200 @@ body > p {
 
 .dot.active {
     background-color: #165640;
+}
+/* Tasks Card Container */
+#tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid #1a1a1a;
+    border-radius: 20px;
+    padding: 22px;
+    background-color: #060606;
+}
+
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tasks-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+#selected-date {
+    font-size: 15px;
+    color: #9e9e9e;
+}
+
+/* Input & Button Row */
+.task-input-row {
+    display: flex;
+    gap: 10px;
+}
+
+#new-task-input {
+    flex: 1;
+    background-color: #1c1e1d;
+    border: 1px solid #2a2d2b;
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+}
+
+#new-task-input:focus {
+    border-color: #165640;
+}
+
+#add-task-btn {
+    background-color: #165640;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#add-task-btn:hover {
+    filter: brightness(1.15);
+}
+
+
+#task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 170px; /* Fits ~3 tasks before scrolling */
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+#task-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#task-list::-webkit-scrollbar-thumb {
+    background-color: #2a2d2b;
+    border-radius: 4px;
+}
+
+/* Strikes through text when checkbox is ticked */
+.task-checkbox:checked + .task-text {
+    text-decoration: line-through;
+    color: #6e6e6e;
+}
+
+/* White border to show which day you are currently viewing */
+.day.selected {
+    outline: 2px solid #ffffff;
+    outline-offset: -2px;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1c1e1d;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.task-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.task-checkbox {
+    accent-color: #165640;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.delete-task-btn {
+    background: none;
+    border: none;
+    color: #8c8c8c;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 6px;
+}
+
+.delete-task-btn:hover {
+    color: #ff5555;
+}
+/* Filter Tabs Row */
+.filter-row {
+    display: flex;
+    gap: 8px;
+    background-color: #141615;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.filter-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #8c8c8c;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filter-btn:hover {
+    color: #ffffff;
+}
+
+.filter-btn.active {
+    background-color: #165640;
+    color: #ffffff;
+}
+
+/* Hover effect for clickable sidebar items */
+#all-tasks-list .task-item {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+#all-tasks-list .task-item:hover {
+    background-color: #252827;
+}
+/* Overdue state on calendar days */
+.day.overdue {
+    background-color: #5c1d24; /* Dark red for overdue days */
+    color: #ff99a0;
+    border: 1px solid #9e2a35;
+    font-weight: 500;
+}
+
+/* If a day was logged in AND has an overdue task, show a red border warning */
+.day.active.overdue {
+    background-color: #165640;
+    border: 2px solid #e04f5f;
+}
+
+.dot.overdue {
+    background-color: #5c1d24;
+    border: 1px solid #9e2a35;
+}
+
+/* Red badge in the right sidebar for overdue tasks */
+.task-date-badge.overdue {
+    background-color: #8c222c;
+    color: #ffdce0;
 }
