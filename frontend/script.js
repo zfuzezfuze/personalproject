@@ -13,30 +13,121 @@ async function loadTasksForDate(date) {
     }
 
     const tasks = await response.json();
+    console.log(`Tasks for ${date}:`, tasks);
 
-    console.log(tasks);
+    // Render the database tasks into the bottom-left box
+    renderDatabaseTasks(date, tasks);
+}
+function renderDatabaseTasks(dateString, tasks) {
+    const taskList = document.getElementById("task-list");
+    const selectedDateLabel = document.getElementById("selected-date");
 
-    // Later: display these tasks in the calendar interface
+    // Extract the day number from "2026-10-05" -> 5
+    const dayNum = Number(dateString.split("-")[2]);
+    selectedDateLabel.textContent = `October ${dayNum}, 2026`;
+    taskList.innerHTML = "";
+
+    if (tasks.length === 0) {
+        taskList.innerHTML = `<li class="task-item" style="color: #8c8c8c; justify-content: center;">No tasks for this day yet</li>`;
+        return;
+    }
+
+    tasks.forEach((task) => {
+        // Uses your PostgreSQL column names: task.id, task.title, task.completed
+        const list_item_html = `
+            <li class="task-item" data-id="${task.id}">
+                <label class="task-label">
+                    <input type="checkbox" class="task-checkbox" ${task.completed ? "checked" : ""}>
+                    <span class="task-text">${task.title}</span>
+                </label>
+                <button class="delete-task-btn">✕</button>
+            </li>`;
+        taskList.insertAdjacentHTML("beforeend", list_item_html);
+    });
 }
 
-loadTasksForDate("2026-10-24");
+
+
 
 // Current date cutoff for overdue tasks (October 23, 2026)
 const TODAY = 23;
 
-// Sample tasks (Notice Day 15 & 20 have incomplete tasks before Oct 23 -> Overdue!)
-const tasksByDay = {
-    "15": [
-        { id: 1, text: "Finish INFS3208 Dockerfile", done: true },
-        { id: 2, text: "Set up Kubernetes deployment", done: false }
-    ],
-    "20": [
-        { id: 3, text: "Write API endpoints for tasks", done: false }
-    ],
-    "23": [
-        { id: 4, text: "Test microservice containers", done: false }
-    ]
-};
+// Start with an empty object that will be populated from PostgreSQL
+let tasksByDay = {};
+
+// Helper: Converts day number ("5" or "24") -> "2026-10-05" or "2026-10-24"
+// Safely handles BOTH "5", "24", AND "2026-10-24" without doubling the prefix!
+function formatDayToDate(dayOrDate) {
+    const str = String(dayOrDate).trim();
+    
+    // If it already starts with "2026-10-", return it as-is
+    if (str.startsWith("2026-10-")) {
+        return str;
+    }
+    
+    const paddedDay = str.padStart(2, "0");
+    return `2026-10-${paddedDay}`;
+}
+// 1. Fetches ALL tasks from PostgreSQL to populate the Right Sidebar & Calendar Colors
+async function loadAllTasksFromDB() {
+    try {
+        const response = await fetch("http://localhost:5001/api/tasks");
+        if (!response.ok) throw new Error("Failed to load all tasks");
+
+        const dbTasks = await response.json();
+
+        // Reset and rebuild tasksByDay from the database rows
+        tasksByDay = {};
+
+        dbTasks.forEach((row) => {
+            // row.due_date is "2026-10-05" -> Number("05") becomes "5"
+            const dayKey = String(Number(row.due_date.split("-")[2]));
+
+            if (!tasksByDay[dayKey]) {
+                tasksByDay[dayKey] = [];
+            }
+
+            // Map PostgreSQL columns (title, completed) to our UI format (text, done)
+            tasksByDay[dayKey].push({
+                id: row.id,
+                text: row.title,
+                done: row.completed,
+                due_date: row.due_date
+            });
+        });
+
+        refreshUI();
+    } catch (error) {
+        console.error("❌ Error loading tasks from DB:", error);
+    }
+}
+
+// 2. Fetches tasks for ONE specific clicked date using your ?date=2026-10-XX query
+async function loadTasksForDate(dayNumber) {
+    const formattedDate = formatDayToDate(dayNumber);
+
+    try {
+        const response = await fetch(
+            `http://localhost:5001/api/tasks?date=${encodeURIComponent(formattedDate)}`
+        );
+        if (!response.ok) throw new Error("Failed to load tasks for date");
+
+        const dbTasksForDay = await response.json();
+        console.log(`Loaded from DB for ${formattedDate}:`, dbTasksForDay);
+
+        // Update just this day's array inside tasksByDay
+        tasksByDay[String(dayNumber)] = dbTasksForDay.map((row) => ({
+            id: row.id,
+            text: row.title,
+            done: row.completed,
+            due_date: row.due_date
+        }));
+
+        renderTasks(String(dayNumber));
+    } catch (error) {
+        console.error(`❌ Error loading tasks for ${formattedDate}:`, error);
+    }
+}
 
 let currentSelectedDay = null;
 let currentFilter = "all"; // "all" | "incomplete" | "completed"
@@ -197,7 +288,8 @@ function selectCalendarDay(dayNumber) {
         }
     });
 
-    renderTasks(currentSelectedDay);
+    // Queries http://localhost:5001/api/tasks?date=2026-10-XX
+    loadTasksForDate(currentSelectedDay);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -211,14 +303,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const allTasksList = document.getElementById('all-tasks-list');
 
     // Initial render
-    refreshUI();
+    loadAllTasksFromDB();
 
     // 1. SINGLE-CLICK DAY ON CALENDAR -> Select day to view tasks
-    calendar.addEventListener('click', (event) => {
-        const clickedDay = event.target.closest('.day:not(.empty)');
+    calendar.addEventListener("click", (event) => {
+        const clickedDay = event.target.closest(".day:not(.empty)");
         if (!clickedDay) return;
 
-        selectCalendarDay(clickedDay.textContent.trim());
+        // 1. Highlight the clicked square
+        document.querySelectorAll(".day.selected").forEach(el => el.classList.remove("selected"));
+        clickedDay.classList.add("selected");
+
+        // 2. Construct "2026-10-XX" from the text inside the clicked div
+        const dayNumber = clickedDay.textContent.trim();
+        const formattedDate = formatDayToDate(dayNumber);
+
+        // 3. Query your Flask + PostgreSQL service!
+        loadTasksForDate(formattedDate);
     });
 
     // 2. DOUBLE-CLICK DAY ON CALENDAR -> Toggle "Logged in" (green) manually
