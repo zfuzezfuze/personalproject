@@ -19,13 +19,12 @@ CORS(app, resources={
 
 @app.route("/api/tasks", methods=["GET"])
 def get_tasks():
-
+    print("hello world")
     # Connect to PostgreSQL
     with psycopg.connect(
-        os.environ["DATABASE_URL"],
+        "postgresql://studytrack:devpassword@localhost:5433/studytrack",
         row_factory=dict_row
     ) as conn:
-
         # Retrieve tasks from the database
         with conn.cursor() as cursor:
             cursor.execute(
